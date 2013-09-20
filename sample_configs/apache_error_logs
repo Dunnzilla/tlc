@@ -1,0 +1,39 @@
+
+# Format
+# Line 1: Pattern
+# Line 2: Color rules (must be indented)
+#
+# Color rules can be one or more of
+# A color name: BLACK RED GREEN BROWN BLUE MAGENTA CYAN WHITE
+# 'BOLD'
+# Rules case insensitive
+# Patterns just a regular regex
+
+/^\[[^\]]+\] /
+  grey
+
+/\[DEBUG\].*/
+  green
+
+/\[WARN\].*/
+  yellow
+
+/\[ERROR\].*/
+  red,bold
+
+/\[notice\].*/
+  white,bold
+
+/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/
+  cyan
+
+/(\s+|^)at \/[a-z]+.*:[0-9]+/
+  blue,bold
+
+/\[error\].*/
+  red,bold
+
+# THis is funny (sort of, not really?)
+# Pattern /[0-9]+/ will cause the ansi escape sequences to be rewritten, as they're numbers too :)
+# white
+

@@ -1,0 +1,90 @@
+#!/usr/bin/env ruby
+#
+# A simple text colorizer.
+# Provide a config file name (required) and stream something to stdin
+
+ 
+def set_config(argv)
+    argv[1] || "#{ENV['HOME']}/.tlc"
+end
+
+def read_config(filename, config)
+    return unless filename
+    config ||= {}
+    current_pattern = nil
+    File.open(filename, "r") do |fh|
+      fh.each_line do |line|
+          line.chomp!
+          next if line =~ /^\s*#/
+          next if line =~ /^\s+$/
+          if line =~ /^\s+/
+              next unless current_pattern
+              colors = line.gsub(/^\s+/, '')
+              colors.gsub!(/\s+$/, '')
+              colors.upcase!
+              config[current_pattern] ||= ''
+              config[current_pattern] += ",#{colors}"
+              next
+          end
+          if line =~ /^\//
+              current_pattern = line.gsub(/^\//, '')
+              current_pattern.gsub!(/\/$/, '')
+              next
+          end
+
+        # do stuff to server here
+      end
+    end
+    config
+end
+
+config_file = set_config(ARGV)
+config = {}
+read_config(config_file, config)
+
+## Escape sequences for colors
+## Misc
+
+## Foreground colors
+COLOR = {
+    'GREY' => "\033[1;30m",
+    'GRAY' => "\033[1;30m",
+    'BLACK' => "\033[30m",
+    'RED' => "\033[31m",
+    'GREEN' => "\033[32m",
+    'BROWN' => "\033[33m",
+    'YELLOW' => "\033[1;33m",
+    'BLUE' => "\033[34m",
+    'MAGENTA' => "\033[35m",
+    'CYAN' => "\033[36m",
+    'WHITE' => "\033[37m",
+    'RESET' => "\033[0m",
+    'BOLD' => "\033[1m",
+    'BLINK' => "\033[5m",
+}
+ 
+patterns = config.keys
+
+$stdin.each_line do |line|
+  line.chomp!
+  any_changes = false
+  patterns.each do |pattern|
+      if m = /#{pattern}/.match(line)
+          # puts "MATCH: /#{pattern}/ for:#{line}\n"
+          # puts "Matching string: [[#{m}]]"
+          # puts "New line with rules #{config[pattern].split(',')}:\n"
+          prefix_string = ''
+          config[pattern].split(',').each do |rule|
+              next if rule.empty?
+              # puts "applying rule #{rule}, which gives us #{COLOR[rule]}"
+              # puts "new line is: #{line}"
+              prefix_string += COLOR[rule]
+          end
+          line.gsub!(/#{pattern}/, "#{prefix_string}#{m}#{COLOR['RESET']}")
+          any_changes = true
+      end
+      line.gsub!(/$/, COLOR['RESET']) if any_changes
+  end
+  puts line
+end
+
