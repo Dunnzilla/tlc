@@ -1,0 +1,5 @@
+This line has grey, doesn't it?
+And this line has green!
+While this line (with parens), has white.
+And this one has red or even bold stuff.
+

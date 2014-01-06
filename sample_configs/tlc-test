@@ -1,0 +1,29 @@
+
+# Format
+# Line 1: Pattern
+# Line 2: Color rules (must be indented)
+#
+# Color rules can be one or more of
+# A color name: BLACK RED GREEN BROWN BLUE MAGENTA CYAN WHITE
+# 'BOLD'
+# Rules case insensitive
+# Patterns just a regular regex
+
+/grey/
+  grey
+
+/green/
+  green
+
+/yellow/
+  yellow
+
+/(red|bold)/
+  red,bold
+
+/[0-9]+/
+  white
+
+/[:'"@$#\-,.;!\?()]+/
+  blue,bold
+
