@@ -9,21 +9,24 @@
 # Rules case insensitive
 # Patterns just a regular regex
 
-/grey/
-  grey
+/\<OK\>/
+  green,bold
 
-/green/
-  green
-
-/yellow/
+/(warn|warning|not.found)/
   yellow
 
-/(red|bold)/
+/(error|fail|failure|panic|alert)/
   red,bold
 
-/[0-9]+/
-  white
+/\d+/
+  blue
 
 /[:'"@$#\-,.;!\?()]+/
   blue,bold
+
+/^==>.*/
+  green
+
+/Initialized/
+  red,bold
 
