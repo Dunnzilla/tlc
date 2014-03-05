@@ -22,3 +22,9 @@ Example line to stick in your .vimrc which will map 'gl' in movement mode to tai
 
 (Adjust to wherever your tlc binary is)
 
+
+Silly Lines
+-----------
+
+This line has the word platypus in it.
+
