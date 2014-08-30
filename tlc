@@ -21,12 +21,20 @@ def read_config(filename, config)
   dbg_puts "reading config #{filename}"
     return unless filename
     config ||= {}
+    config[:skip_patterns] ||= []
     current_pattern = nil
     File.open(filename, "r") do |fh|
       fh.each_line do |line|
           line.chomp!
           next if line =~ /^\s*#/
           next if line =~ /^\s+$/
+          if line =~ /^SKIP\s+/
+              skip_pattern = line.gsub(/^SKIP\s+\//, '')
+              skip_pattern.gsub!(/\/$/, '')
+              config[:skip_patterns].push skip_pattern
+              puts "Skipping pattern #{skip_pattern}"
+              next
+          end
           if line =~ /^\s+/
               next unless current_pattern
               colors = line.gsub(/^\s+/, '')
@@ -122,7 +130,13 @@ $stdin.each_line do |line|
   cm = ColorMatches.new()
   any_changes = false
   color_changes = []
+  skip = false
+  config[:skip_patterns].each do |skip_pattern|
+      skip = true if m = line.match(/#{skip_pattern}/)
+  end
+  next if skip
   patterns.each do |pattern|
+      next if pattern == config[:skip_pattern]
       if m = line.match(/#{pattern}/)
 =begin
           all_offsets = (0 ... m.length).map { |n| m.offset(n) }

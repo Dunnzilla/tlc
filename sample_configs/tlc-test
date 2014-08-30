@@ -3,6 +3,11 @@
 # Line 1: Pattern
 # Line 2: Color rules (must be indented)
 #
+# OR
+#
+# Line 2: SKIP /Pattern/
+#
+#
 # Color rules can be one or more of
 # A color name: BLACK RED GREEN BROWN BLUE MAGENTA CYAN WHITE
 # 'BOLD'
@@ -18,8 +23,17 @@
 /(error|fail|failure|panic|alert)/
   red,bold
 
+/^ERROR/
+  red,bold
+
+/ERROR:/
+  red,bold
+
 /\d+/
   blue
+
+/Severity: Notice/
+  yellow,bold
 
 /[:'"@$#\-,.;!\?()]+/
   blue,bold
@@ -27,6 +41,23 @@
 /^==>.*/
   green
 
-/Initialized/
-  red,bold
+SKIP /Class Initialized/
+SKIP /model initialized/
+SKIP /Model Initialized/
+SKIP /Second attempt ignored/
+SKIP /Final output sent to browser/
+SKIP /Helper loaded/
+SKIP /UTF-8 Support Enabled/
+SKIP /Global POST and COOKIE data sanitized/
+SKIP /The mysql extension is deprecated/
+SKIP /Config file loaded/
+SKIP /Session routines successfully run/
+SKIP /Crud controller has been initialized/
+SKIP /Overloaded function database/
+SKIP /File loaded/
+SKIP /A session cookie was not found/
+SKIP /controller has been initia/
+SKIP /^\s*$/
+
+
 
